@@ -487,6 +487,72 @@
     @media (prefers-reduced-motion: reduce) {
       * { scroll-behavior: auto !important; transition: none !important; }
     }
+    /* Image lightbox */
+    img[data-lightbox="true"] {
+      cursor: zoom-in;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(10, 6, 3, 0.92);
+      backdrop-filter: blur(6px);
+    }
+
+    .lightbox.is-open {
+      display: flex;
+    }
+
+    .lightbox img {
+      width: auto;
+      max-width: 96vw;
+      height: auto;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.55);
+      cursor: zoom-out;
+      background: #120b07;
+    }
+
+    .lightbox p {
+      position: fixed;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+      margin: 0 auto;
+      max-width: 760px;
+      text-align: center;
+      color: rgba(255, 249, 239, .86);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      border: 1px solid rgba(255,255,255,.28);
+      background: rgba(255,255,255,.12);
+      color: #fff9ef;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255,255,255,.2);
+    }
+
   </style>
   <script type="application/ld+json">
   {
@@ -587,15 +653,15 @@
 
         <div class="media-grid">
           <figure class="photo-card wide">
-            <img src="assets/tomales-street-1922.jpg" alt="Historic Tomales street view from around 1922" loading="lazy" />
+            <img data-lightbox="true" src="assets/tomales-street-1922.jpg" alt="Historic Tomales street view from around 1922" loading="lazy" />
             <figcaption class="caption sans">Tomales after the 1920 rebuilding period. The bank sits in the historic village core.</figcaption>
           </figure>
           <figure class="photo-card">
-            <img src="assets/bank-1920-historic.jpg" alt="Newly built Bank of Tomales building in 1920" loading="lazy" />
+            <img data-lightbox="true" src="assets/bank-1920-historic.jpg" alt="Newly built Bank of Tomales building in 1920" loading="lazy" />
             <figcaption class="caption sans">The newly built bank, circa 1920, with its tall windows and central doors.</figcaption>
           </figure>
           <figure class="photo-card">
-            <img src="assets/facade-current-2008.jpg" alt="Bank of Tomales facade photographed in 2008" loading="lazy" />
+            <img data-lightbox="true" src="assets/facade-current-2008.jpg" alt="Bank of Tomales facade photographed in 2008" loading="lazy" />
             <figcaption class="caption sans">The former Bank of Tomales facade, later known as Not A Bank.</figcaption>
           </figure>
         </div>
@@ -636,23 +702,23 @@
         </div>
         <div class="media-grid stay-gallery" aria-label="Not A Bank interiors">
           <figure class="photo-card wide">
-            <img src="assets/main-room-vault.jpg" alt="Main room at Not A Bank with piano, teller window, vault, gas stove, record player, Bluetooth speaker, and art" loading="lazy" />
+            <img data-lightbox="true" src="assets/main-room-vault.jpg" alt="Main room at Not A Bank with piano, teller window, vault, gas stove, record player, Bluetooth speaker, and art" loading="lazy" />
             <figcaption class="caption sans">The main room: old bank details, vault door, gas stove, art, and music. A record player and Bluetooth audio let you play your own soundtrack.</figcaption>
           </figure>
           <figure class="photo-card">
-            <img src="assets/vault-door.jpg" alt="Original bank vault door inside Not A Bank" loading="lazy" />
+            <img data-lightbox="true" src="assets/vault-door.jpg" alt="Original bank vault door inside Not A Bank" loading="lazy" />
             <figcaption class="caption sans">The vault remains one of the building's strongest historic anchors.</figcaption>
           </figure>
           <figure class="photo-card">
-            <img src="assets/music-room.jpg" alt="Grand piano, organ, guitars, and art inside Not A Bank" loading="lazy" />
+            <img data-lightbox="true" src="assets/music-room.jpg" alt="Grand piano, organ, guitars, and art inside Not A Bank" loading="lazy" />
             <figcaption class="caption sans">A private art-and-music stay with room to play, record, listen, and disappear into the sound.</figcaption>
           </figure>
           <figure class="photo-card">
-            <img src="assets/bedroom.jpg" alt="Bedroom at Not A Bank with bookshelves and historic interior windows" loading="lazy" />
+            <img data-lightbox="true" src="assets/bedroom.jpg" alt="Bedroom at Not A Bank with bookshelves and historic interior windows" loading="lazy" />
             <figcaption class="caption sans">A calm upstairs bedroom inside the former bank volume.</figcaption>
           </figure>
           <figure class="photo-card">
-            <img class="crop-bottom" src="assets/red-sofa.jpg" alt="Red leather sofa beneath tall bank windows at Not A Bank" loading="lazy" />
+            <img data-lightbox="true" class="crop-bottom" src="assets/red-sofa.jpg" alt="Red leather sofa beneath tall bank windows at Not A Bank" loading="lazy" />
             <figcaption class="caption sans">Tall windows, art, and lounge space inside the former bank.</figcaption>
           </figure>
         </div>
@@ -739,5 +805,58 @@
   <div class="sticky-book" aria-label="Sticky booking button">
     <a class="btn btn-primary" href="https://www.airbnb.com/rooms/616796?utm_source=notabank_site&utm_medium=sticky_mobile&utm_campaign=book_now" target="_blank" rel="noopener">Check dates</a>
   </div>
+  <div class="lightbox" id="imageLightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
+    <button class="lightbox-close" type="button" aria-label="Close expanded image">×</button>
+    <img src="" alt="" />
+    <p class="sans">Tap the image to close</p>
+  </div>
+
+  <script>
+    (function () {
+      const lightbox = document.getElementById('imageLightbox');
+      if (!lightbox) return;
+      const lightboxImg = lightbox.querySelector('img');
+      const closeButton = lightbox.querySelector('.lightbox-close');
+      const images = document.querySelectorAll('img[data-lightbox="true"]');
+
+      function openLightbox(img) {
+        lightboxImg.src = img.currentSrc || img.src;
+        lightboxImg.alt = img.alt || 'Expanded Not A Bank image';
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(function () { lightboxImg.src = ''; }, 150);
+      }
+
+      images.forEach(function (img) {
+        img.addEventListener('click', function () { openLightbox(img); });
+        img.setAttribute('tabindex', '0');
+        img.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openLightbox(img);
+          }
+        });
+      });
+
+      lightbox.addEventListener('click', closeLightbox);
+      closeButton.addEventListener('click', function (event) {
+        event.stopPropagation();
+        closeLightbox();
+      });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+          closeLightbox();
+        }
+      });
+    }());
+  </script>
+
 </body>
 </html>
